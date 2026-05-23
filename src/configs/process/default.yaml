@@ -1,0 +1,16 @@
+# configs/conferences/ml_config.yaml
+# Machine Learning Conference Specific: Review Rules, including ICLR/NeurIPS/ICML
+phase_i:  # Phase I: Initial Review
+  rating_range: "1-10"  # Rating Scale
+  review_sections:  # Mandatory Four Sections of Review
+    - "Summarize the contributions claimed by the paper"
+    - "Strengths (specific reasons supporting acceptance)"
+    - "Weaknesses (specific reasons supporting rejection)"
+    - "Suggestions for improving the paper"
+phase_v:
+  possible_decisions: 
+    - "Accept-oral (Top 2%, accepted for oral presentation, score 8-10)"
+    - "Accept-spotlight (Top 10%, accepted for spotlight presentation, score 6-8)"
+    - "Accept-poster (Top 32%, accepted for poster presentation, score around 6)"
+    - "Reject (rejected)"
+  acceptance_rate: 0.3  # 30% Acceptance Rate

@@ -1,0 +1,15 @@
+# Base Prompts
+
+image_analyze_tool_usage_prompt: |
+  If you need to query the specific content of certain images, you can use the image_analyzer tool, and only query images that are essential.
+  You can query multiple images in one call; please use specific query statements. You can call this tool a maximum of 3 times.
+  Please note that this is not a simulated environment—you can only obtain image content by actually invoking the tool.
+  The image path is the content of the src attribute in the <img> tag within the paper content.
+
+comment_analyze_tool_usage_prompt: "If you need to analyze and classify the points of doubt in the reviews, you can call the comment_analyzer tool; if no analysis is required, generate rebuttals directly."
+
+paper_read_tool_usage_prompt: |
+  Relevant paper context and paper main text has been provided. In most cases, you can obtain all the necessary information from the main text.
+  But if necessary, you can use _read_paper_tool to obtain the abstract, citations, appendices (summary), or descriptions of all images of the paper.
+  The cost of calling this tool is relatively high, and it is only called when the provided content and main text cannot meet the requirements. You need to explain why you need this extra information.
+        

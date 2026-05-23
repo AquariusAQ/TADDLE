@@ -1,0 +1,222 @@
+# defaults
+defaults: # Later loading overrides earlier loading
+  - _self_                                  # Self configuration
+  - models
+  - prompt/base                             # Base Prompt
+  - process/default                         # Default conference process
+  - prompt/default                          # Default conference prompt
+  - conferences: null                       
+  # Step 2: Override the value of conferences
+  - optional process: ${conferences}        # OPTION for process group defaults to "default" and is optional; set it in the command line
+  - optional prompt: ${conferences}         # OPTION for prompt group defaults to "default" and is optional; set it in the command line
+  - override conferences: default      
+
+# models
+llm_author: ${qwen3_30b}
+llm_reviewer: ${qwen3_30b}
+llm_meta_reviewer: ${qwen3_30b}
+llm_defense: ${qwen3_30b}
+llm_tools: ${qwen3_30b}
+llm_integrate_tool: ${masai}
+vlm_reviewer: ${qwen3_vl_4b}
+vlm: ${qwen3_vl_4b}
+
+llm_evaluate_suggestion: ${qwen3_30b}
+
+# disabled
+# tokenizer:
+#   model_path: "/home/LLM/Qwen/Qwen3.5-0.8B"  # Local model path, used to select the appropriate tokenizer
+#   max_paper_token: 50000  # Maximum token count for paper content; truncate if exceeded
+
+experiment:
+  name: "MASAI"
+  input_path: "" # If not starting from phase_1, provide the path to the output of completed phases to read message.jsonl and result.json
+  workflow: # Execution phases; review process must be continuous, defense phases can be selected arbitrarily
+    phase_i: true                # 1. Initial Review
+    phase_ii: false               # 2. Author Rebuttal
+    phase_iii: false              # 3. Updated Review
+    phase_iv: false               # 4. Meta Review
+    phase_v: false               # 5. Final Decision
+    defense_initial: true        # Analyze initial reviews
+    defense_updated: false        # Analyze updated reviews
+  enable_llm_suggestion_md_tidy: true
+
+# Dataset Configuration
+dataset:
+  default_name: "toy_batch"  # Dataset name
+  default_paper_id: !!str "2510.14528v3"  # Paper ID
+
+
+# reviewers:  # all reviewers with predefined features (1 = malicious feature exists, 0 = no malicious feature, -1 = feature not considered)
+#   - name: "Reviewer AA"
+#   - name: "Reviewer AB"
+#   - name: "Reviewer AC"
+#   - name: "Reviewer B": information_error
+#   - name: "Reviewer C": lack_constructive
+#   - name: "Reviewer D": careless
+#   - name: "Reviewer E": unprofessional
+#   - name: "Reviewer F": bias
+#   - name: "Reviewer G": no_evidence
+  
+
+# Agent Feature Configuration
+agents:
+  author:
+    name: "Paper Author"
+  reviewer:
+    max_workers_reviewer: 3  # Maximum number of reviewers analyzing in parallel
+    skip_reviewers: "" # combine with ,
+  reviewers:  # all reviewers with predefined features (1 = malicious feature exists, 0 = no malicious feature, -1 = feature not considered)
+    - name: "Reviewer AA"
+      information_error: 0      # Information Error 1 / Accurate Information 0
+      lack_constructive: -1      # Lack of Constructiveness 1 / Highly Constructive 0
+      careless: -1               # Careless & Unserious 1 / Rigorous & Meticulous 0
+      unprofessional: 0         # Unprofessional & Hostile 1 / Professional & Courteous 0
+      bias: -1                   # Bias-Oriented 1 / Objective & Impartial 0
+      no_evidence: -1            # Unsubstantiated Claims 1 / Well-Substantiated 0
+    - name: "Reviewer AB"
+      information_error: -1      # Information Error 1 / Accurate Information 0
+      lack_constructive: 0      # Lack of Constructiveness 1 / Highly Constructive 0
+      careless: -1               # Careless & Unserious 1 / Rigorous & Meticulous 0
+      unprofessional: -1         # Unprofessional & Hostile 1 / Professional & Courteous 0
+      bias: 0                   # Bias-Oriented 1 / Objective & Impartial 0
+      no_evidence: -1            # Unsubstantiated Claims 1 / Well-Substantiated 0
+    - name: "Reviewer AC"
+      information_error: -1      # Information Error 1 / Accurate Information 0
+      lack_constructive: -1      # Lack of Constructiveness 1 / Highly Constructive 0
+      careless: 0               # Careless & Unserious 1 / Rigorous & Meticulous 0
+      unprofessional: -1         # Unprofessional & Hostile 1 / Professional & Courteous 0
+      bias: -1                   # Bias-Oriented 1 / Objective & Impartial 0
+      no_evidence: 0            # Unsubstantiated Claims 1 / Well-Substantiated 0
+    - name: "Reviewer B"
+      information_error: 1      # Information Error 1 / Accurate Information 0
+      lack_constructive: -1      # Lack of Constructiveness 1 / Highly Constructive 0
+      careless: -1               # Careless & Unserious 1 / Rigorous & Meticulous 0
+      unprofessional: -1         # Unprofessional & Hostile 1 / Professional & Courteous 0
+      bias: -1                   # Bias-Oriented 1 / Objective & Impartial 0
+      no_evidence: -1            # Unsubstantiated Claims 1 / Well-Substantiated 0
+    - name: "Reviewer C"
+      information_error: -1      # Information Error 1 / Accurate Information 0
+      lack_constructive: 1      # Lack of Constructiveness 1 / Highly Constructive 0
+      careless: -1               # Careless & Unserious 1 / Rigorous & Meticulous 0
+      unprofessional: -1         # Unprofessional & Hostile 1 / Professional & Courteous 0
+      bias: -1                   # Bias-Oriented 1 / Objective & Impartial 0
+      no_evidence: -1            # Unsubstantiated Claims 1 / Well-Substantiated 0
+    - name: "Reviewer D"
+      information_error: -1      # Information Error 1 / Accurate Information 0
+      lack_constructive: -1      # Lack of Constructiveness 1 / Highly Constructive 0
+      careless: 1               # Careless & Unserious 1 / Rigorous & Meticulous 0
+      unprofessional: -1         # Unprofessional & Hostile 1 / Professional & Courteous 0
+      bias: -1                   # Bias-Oriented 1 / Objective & Impartial 0
+      no_evidence: -1            # Unsubstantiated Claims 1 / Well-Substantiated 0
+    - name: "Reviewer E"
+      information_error: -1      # Information Error 1 / Accurate Information 0
+      lack_constructive: -1      # Lack of Constructiveness 1 / Highly Constructive 0
+      careless: -1               # Careless & Unserious 1 / Rigorous & Meticulous 0
+      unprofessional: 1         # Unprofessional & Hostile 1 / Professional & Courteous 0
+      bias: -1                   # Bias-Oriented 1 / Objective & Impartial 0
+      no_evidence: -1            # Unsubstantiated Claims 1 / Well-Substantiated 0
+    - name: "Reviewer F"
+      information_error: -1      # Information Error 1 / Accurate Information 0
+      lack_constructive: -1      # Lack of Constructiveness 1 / Highly Constructive 0
+      careless: -1               # Careless & Unserious 1 / Rigorous & Meticulous 0
+      unprofessional: -1         # Unprofessional & Hostile 1 / Professional & Courteous 0
+      bias: 1                   # Bias-Oriented 1 / Objective & Impartial 0
+      no_evidence: -1            # Unsubstantiated Claims 1 / Well-Substantiated 0
+    - name: "Reviewer G"
+      information_error: -1      # Information Error 1 / Accurate Information 0
+      lack_constructive: -1      # Lack of Constructiveness 1 / Highly Constructive 0
+      careless: -1               # Careless & Unserious 1 / Rigorous & Meticulous 0
+      unprofessional: -1         # Unprofessional & Hostile 1 / Professional & Courteous 0
+      bias: -1                   # Bias-Oriented 1 / Objective & Impartial 0
+      no_evidence: 1            # Unsubstantiated Claims 1 / Well-Substantiated 0
+  meta_reviewer:
+    name: "Area Chair"
+    ignore_analysis_without_malice: false  # Whether to ignore analysis results for non-malicious reviews
+    type: "inclusive"  # Inclusive / Authoritarian / Conformist
+    visible_reviewers: []
+  defense_agent:
+    name: "Defense Agent"
+    input_paper_content: "full" # "full" or "abstract"
+    skip_reviewers: "" # combine with ,
+    max_workers_tool_call: 10 # tool calls in parallel
+    max_workers_analyze_initial: 3 # review analyze in parallel
+    max_workers_analyze_updated: 3 # review analyze in parallel
+    max_retry: 4
+    retry_delay: 1
+    enable_prefix_cache: false
+  
+# Process Parameters
+process:
+  phase_i:  # Phase I: Initial Review
+    rating_range: "1-10"  # Rating Scale
+    review_sections:  # Mandatory four sections of review
+      - "Brief paper summary"
+      - "Strengths (specific reasons supporting acceptance)"
+      - "Weaknesses (specific reasons supporting rejection)"
+      - "Improvement suggestions"
+  phase_ii:  # Phase II: Author Rebuttal
+    response_types:  # Types of objections the author needs to address
+      - "Misunderstanding-based questions (clarify by supplementing details)"
+      - "Defense-based questions (emphasize differences by comparing with existing work)"
+      - "Reasonable criticisms (acknowledge shortcomings and commit to improvements)"
+  phase_iii:  # Phase III: Reviewer-AC Discussion
+    max_discussion_rounds: 2  # Maximum number of discussion rounds
+    divergence_threshold: 3  # Score divergence threshold (mediation required if exceeded)
+  phase_iv:  # Phase IV: Meta Review Integration
+    meta_review_sections:  # Mandatory sections of meta review
+      - "Provide a paper summary based on the paper content (if provided), reviewers' comments and discussions (if provided), author's rebuttal, and your professional knowledge."
+      - "Core contributions and shortcomings of the paper (based on reviewer consensus)"
+      - "Judgment on the effectiveness of the author's rebuttal"
+      - "Reconciliation of reviewer score divergence"
+  phase_v:  # Phase V: Final Decision
+    possible_decisions: 
+      - "Accept-oral (Top 2%, accepted for oral presentation, score 8-10)"
+      - "Accept-spotlight (Top 10%, accepted for spotlight presentation, score 6-8)"
+      - "Accept-poster (Top 32%, accepted for poster presentation, score around 6)"
+      - "Reject (rejected)"
+    acceptance_rate: 0.3  # 30% Acceptance Rate
+
+# Tool Configuration
+tools:
+  paper_processor:
+    enabled: true
+  comment_analyzer:
+    enabled: false
+  revision_tracker:
+    enabled: false
+  image_analyzer:  # Image analysis tool configuration
+    enabled: false
+  malice_defense_tool:  # Unified encapsulation of defensive tools
+    enabled: true
+    sub_tools: 
+      verify: true  # Verification
+      correct: true    # Correction
+      complete: true    # Completion
+      transform: true # Transformation
+      integrate: true   # Integration
+    internal_tools:
+      retrieve: true
+      
+
+# Various server API settings
+
+## External Retrieval Backend
+search_papers:
+  api: # External retrieval API options (supports semanticscholar / arxiv; multiple selections allowed)
+    - "semanticscholar"
+    # - "arxiv"
+  max_results: 10  # Maximum number of retrieved papers for external search
+
+search_api:
+  base_url: "http://localhost:3101/api"  # API service address
+  timeout: 30                            # Timeout (seconds)
+  retry_count: 2                         # Retry count
+  retry_delay: 2                         # Retry delay (seconds)
+
+# Disable hydra logging
+
+hydra:
+  run:
+    dir: "."
+  output_subdir: null

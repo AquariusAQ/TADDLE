@@ -1,0 +1,81 @@
+qwen3_30b:
+  model: "Qwen3-30B-A3B-Thinking-2507"  # Model name deployed locally with vLLM
+  temperature: 0.6
+  max_completion_tokens: 16384
+  base_url: "LOCAL_URL:default"  # vLLM service address
+  api_key: "EMPTY"  # Authentication is generally not required for local deployments
+  extra_body:
+    top_k: 20
+    min_p: 0.0
+
+gavel:
+  model: "gavel"  
+  temperature: 0.1
+  top_p: 0.95
+  max_completion_tokens: 1024
+  base_url: "LOCAL_URL:gavel"  
+  api_key: "EMPTY" 
+  extra_body:
+    lora_name: gavel
+
+qwen3_5_plus:
+  model: "qwen3.5-plus"
+  temperature: 0.1
+  top_p: 0.7
+  max_completion_tokens: 16384
+  base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+  api_key: "LOCAL_KEY:bailian"
+  extra_body:
+    enable_thinking: true
+    thinking_budget: 1000
+
+qwen3_vl_4b:
+  model: "Qwen3-VL-4B-Instruct" 
+  temperature: 0.7
+  max_completion_tokens: 16384
+  base_url: "LOCAL_URL:default" 
+  api_key: "EMPTY" 
+  extra_body:
+    top_k: 20
+    min_p: 0.0
+
+deepseek_v3_2:
+  model: "deepseek-v3.2"
+  temperature: 0.7
+  max_completion_tokens: 16384
+  base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+  api_key: "LOCAL_KEY:bailian"
+  
+glm_4_7:
+  model: "glm-4.7"
+  temperature: 0.1
+  top_p: 0.7
+  max_completion_tokens: 16384
+  base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+  api_key: "LOCAL_KEY:bailian"
+  extra_body:
+    thinking: 
+      type: "disabled"
+
+kimi_k_2_5:
+  model: "kimi-k2.5"
+  max_completion_tokens: 8192
+  base_url: "https://api.moonshot.cn/v1"
+  api_key: "LOCAL_KEY:kimi"
+  extra_body:
+    thinking: 
+      type: "disabled"
+
+minimax_m2_5:
+  model: "MiniMax-M2.5"
+  temperature: 0.7
+  max_completion_tokens: 16384
+  base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+  api_key: "LOCAL_KEY:bailian"
+
+llama_3_3_70b:
+  model: "Llama-3.3-70B-Instruct"
+  temperature: 0.7
+  max_completion_tokens: 5120
+  base_url: "LOCAL_URL:default"
+  api_key: "EMPTY"
