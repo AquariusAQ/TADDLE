@@ -1,0 +1,23 @@
+# Set default behavior for all files
+* text=auto
+
+# Explicitly specify certain file types as text and use LF line endings
+*.txt text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+*.yaml text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.java text eol=lf
+*.c text eol=lf
+*.cpp text eol=lf
+# ... You can add more file extensions based on your project type
+
+# Ensure binary files (such as images) are not processed
+*.png binary
+*.jpg binary
+*.gif binary
+*.zip binary
+*.exe binary

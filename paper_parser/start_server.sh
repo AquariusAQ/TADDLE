@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=0 stdbuf -o0 -e0 paddleocr genai_server --model_name PaddleOCR-VL-0.9B --backend vllm --backend_config <(echo -e 'gpu-memory-utilization: 0.3') --port 8118 > run_log.txt 2>&1
