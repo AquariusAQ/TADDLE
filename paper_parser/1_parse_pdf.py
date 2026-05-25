@@ -122,7 +122,7 @@ def process_pdfs(dataset_name, start=0, end=None, url=None):
 if __name__ == "__main__":
     # Parse command line arguments
     parser = argparse.ArgumentParser(description="Process PDF files in a specified range under a given dataset")
-    parser.add_argument("dataset_name", help="Dataset name (corresponding folder name under ./datasets/)")
+    parser.add_argument("--dataset_name", help="Dataset name (corresponding folder name under ./datasets/)")
     parser.add_argument(
         "--start", 
         type=int, 

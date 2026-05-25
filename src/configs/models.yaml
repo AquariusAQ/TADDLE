@@ -8,15 +8,15 @@ qwen3_30b:
     top_k: 20
     min_p: 0.0
 
-gavel:
-  model: "gavel"  
+grader:
+  model: "grader"  
   temperature: 0.1
   top_p: 0.95
   max_completion_tokens: 1024
-  base_url: "LOCAL_URL:gavel"  
+  base_url: "LOCAL_URL:grader"  
   api_key: "EMPTY" 
   extra_body:
-    lora_name: gavel
+    lora_name: grader
 
 qwen3_5_plus:
   model: "qwen3.5-plus"

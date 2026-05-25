@@ -12,5 +12,5 @@ python main.py \
     agents.defense_agent.input_paper_content="abstract" \
     llm_defense='${qwen3_30b}' \
     llm_tools='${qwen3_30b}' \
-    llm_integrate_tool='${gavel}' \
+    llm_integrate_tool='${grader}' \
     agents.defense_agent.max_workers_analyze_initial=3

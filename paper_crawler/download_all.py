@@ -13,7 +13,7 @@ def read_key_file(file_path):
     except FileNotFoundError:
         return None
 
-MAX_PAPERS_PER_CONFERENCE = 3  # Maximum number of papers to process per conference (adjustable)
+MAX_PAPERS_PER_CONFERENCE = -1  # Maximum number of papers to process per conference (adjustable)
 
 # Read username and password from key files
 OPENREVIEW_USERNAME = read_key_file("username.key") or "YOUR_USERNAME"  

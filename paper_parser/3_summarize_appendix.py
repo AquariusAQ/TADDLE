@@ -303,14 +303,14 @@ def process_dataset(dataset_name: str) -> Tuple[int, int, int, int, list]:
 def main():
     global BASE_URL  # Declare use of global variable
     parser = argparse.ArgumentParser(description="Tool for separating papers into three files (main text/references/appendix) + appendix summarization")
-    parser.add_argument("--base_url",
+    parser.add_argument("--url",
                         default="http://127.0.0.1:8000/v1",
                         help="API base URL (default: %(default)s)")
     parser.add_argument("--datasets", nargs="+", required=True,
                         help="Dataset names (multiple allowed)")
     args = parser.parse_args()
 
-    BASE_URL = args.base_url  # Update global base_url
+    BASE_URL = args.url  # Update global base_url
 
     total_success = total_skip = total_fail = total_no_ref = 0
     all_no_ref_ids = []
