@@ -8,15 +8,15 @@ qwen3_30b:
     top_k: 20
     min_p: 0.0
 
-grader:
-  model: "grader"  
+taddle:
+  model: "taddle"  
   temperature: 0.1
   top_p: 0.95
   max_completion_tokens: 1024
-  base_url: "LOCAL_URL:grader"  
+  base_url: "LOCAL_URL:taddle"  
   api_key: "EMPTY" 
   extra_body:
-    lora_name: grader
+    lora_name: taddle
 
 qwen3_5_plus:
   model: "qwen3.5-plus"

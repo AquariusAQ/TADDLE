@@ -139,7 +139,7 @@ taddle:
   temperature: 0.1
   top_p: 0.95
   max_completion_tokens: 1024
-  base_url: "LOCAL_URL:taddle"           # Grader model service address
+  base_url: "LOCAL_URL:taddle"           # Taddle model service address
   api_key: "EMPTY"
   extra_body:
     lora_name: taddle
@@ -147,8 +147,8 @@ taddle:
 
 **Deployment Notes:**
 
-- Use **vLLM ≥ 0.19.1** to deploy `Qwen3-30B-A3B-Thinking-2507` and the **Grader model** (the Integrate module).  
-- When deploying the Grader, add the following launch argument:
+- Use **vLLM ≥ 0.19.1** to deploy `Qwen3-30B-A3B-Thinking-2507` and the **Taddle model** (the Integrate module).  
+- When deploying the Taddle, add the following launch argument:
   ```bash
   --default-chat-template-kwargs '{"enable_thinking": false}'
   ```
@@ -225,7 +225,7 @@ python main.py \
 
 - `llm_defense` : Backbone model for the Orchestrator.  
 - `llm_tools` : Backbone model for the content analysis tools.  
-- `llm_integrate_tool` : Backbone model for the Integrate module (must use Grader).  
+- `llm_integrate_tool` : Backbone model for the Integrate module (must use Taddle).  
 - `agents.defense_agent.max_workers_analyze_initial` : Number of parallel detection workers.
 
 The output is saved to `src/outputs/iclr_run_detect/`.  

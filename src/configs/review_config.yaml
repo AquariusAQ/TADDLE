@@ -17,7 +17,7 @@ llm_reviewer: ${qwen3_30b}
 llm_meta_reviewer: ${qwen3_30b}
 llm_defense: ${qwen3_30b}
 llm_tools: ${qwen3_30b}
-llm_integrate_tool: ${masai}
+llm_integrate_tool: ${taddle}
 vlm_reviewer: ${qwen3_vl_4b}
 vlm: ${qwen3_vl_4b}
 
@@ -29,7 +29,7 @@ llm_evaluate_suggestion: ${qwen3_30b}
 #   max_paper_token: 50000  # Maximum token count for paper content; truncate if exceeded
 
 experiment:
-  name: "MASAI"
+  name: "TADDLE"
   input_path: "" # If not starting from phase_1, provide the path to the output of completed phases to read message.jsonl and result.json
   workflow: # Execution phases; review process must be continuous, defense phases can be selected arbitrarily
     phase_i: true                # 1. Initial Review
