@@ -40,6 +40,75 @@ INTEGRATE is the only fine-tuned component. We use two-stage semi-supervised tra
 
 This split — frozen analysis tools, fine-tuned integrator — makes the system modular: tools can be swapped for stronger frontier models without retraining, and the integrator can be retrained as the defect taxonomy evolves.
 
+## Fine-tuning Integrate
+
+The training pipeline for Integrate is built on [LlamaFactory](https://github.com/hiyouga/LlamaFactory/). Please follow its official documentation to install the framework first.
+
+```bash
+git clone --depth 1 https://github.com/hiyouga/LlamaFactory.git
+cd LlamaFactory
+pip install -e .
+pip install -r requirements/metrics.txt
+```
+
+Copy the dataset files into `LlamaFactory/data`:
+
+- `integrate_trainer/data/dataset_stage_1.json`
+- `integrate_trainer/data/dataset_stage_2.json`
+
+Then add the following entries to `LlamaFactory/data/dataset_info.json`:
+
+```json
+"dataset_stage_1": {
+  "file_name": "dataset_stage_1.json",
+  "columns": {
+    "prompt": "instruction",
+    "response": "output"
+  }
+},
+"dataset_stage_2": {
+  "file_name": "dataset_stage_2.json",
+  "columns": {
+    "prompt": "instruction",
+    "response": "output"
+  }
+}
+```
+
+Run **Stage 1** training:
+
+```bash
+bash Stage1_train.sh
+```
+
+Run **Stage 2** training:
+
+```bash
+bash Stage2_train.sh
+```
+
+### Example Launch Script
+
+Below is an example command to serve the fine-tuned Integrate (Grader) model with vLLM, using the LoRA adapter obtained from the previous fine-tuning stage:
+
+```bash
+CUDA_VISIBLE_DEVICES=0 vllm serve \
+    Qwen/Qwen3.5-9B \
+    --max-parallel-loading-workers 32 \
+    --port 8000 \
+    --max-model-len 73728 \
+    --enable-lora \
+    --served-model-name grader \
+    --enable-prefix-caching \
+    --language-model-only \
+    --reasoning-parser qwen3 \
+    --default-chat-template-kwargs '{"enable_thinking": false}' \
+    --lora-modules masai=./saves/qwen3.5-9b/lora/sft/dataset_stage_2
+```
+
+This starts the server on port `8000`, with the LoRA module `masai` pointing to the Stage 2 training checkpoint. The `--served-model-name grader` flag ensures the model is accessible as `grader` (the expected name for the Integrate module elsewhere in the pipeline).
+
+
 ## Quick Start
 
 `src/main.py` is the script for generating **persona-based LLM reviews** and performing **Deficiency Detection**.
@@ -79,7 +148,6 @@ grader:
 **Deployment Notes:**
 
 - Use **vLLM ≥ 0.19.1** to deploy `Qwen3-30B-A3B-Thinking-2507` and the **Grader model** (the Integrate module).  
-  The Grader checkpoint will be released soon.
 - When deploying the Grader, add the following launch argument:
   ```bash
   --default-chat-template-kwargs '{"enable_thinking": false}'
@@ -220,7 +288,7 @@ python 2_analyze_all_images.py --datasets NeurIPS2025 --url 127.0.0.1:8001
 Uses the `Qwen3-30B-A3B-Thinking-2507` model by default (recommended to deploy with vLLM). Run:
 
 ```bash
-python 3_summarize_appendix.py --datasets NeurIPS2025 --url 127.0.0.1:8000
+python 3_summarize_appendix.py --datasets NeurIPS2025 --url 127.0.0.1:8002
 ```
 
 - `--datasets` : Specify the dataset name.  
