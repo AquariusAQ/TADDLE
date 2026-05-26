@@ -1,11 +1,11 @@
-# GRADER
-GRADER: A Granular Agent for Defect Evaluation in LLM-Generated Peer Reviews
+# TADDLE
+TADDLE: A Tool-Augmented Agent for Detecting Deficient LLM-Generated Peer Reviews
 
 Here's a method section you can drop into your README:
 
 ## Method
 
-GRADER detects defects in LLM-generated peer reviews by decomposing the task into four specialized analysis stages, an integration stage, and a final composition stage. The key idea is that different defect types leave different kinds of evidence — factual errors live in the review-vs-paper relationship, while bias and tone signals live in the review text itself — so we route each review through dedicated tools rather than relying on a single end-to-end classifier.
+TADDLE detects defects in LLM-generated peer reviews by decomposing the task into four specialized analysis stages, an integration stage, and a final composition stage. The key idea is that different defect types leave different kinds of evidence — factual errors live in the review-vs-paper relationship, while bias and tone signals live in the review text itself — so we route each review through dedicated tools rather than relying on a single end-to-end classifier.
 
 
 ### Components
@@ -89,7 +89,7 @@ bash Stage2_train.sh
 
 ### Example Launch Script
 
-Below is an example command to serve the fine-tuned Integrate (Grader) model with vLLM, using the LoRA adapter obtained from the previous fine-tuning stage:
+Below is an example command to serve the fine-tuned Integrate (TADDLE) model with vLLM, using the LoRA adapter obtained from the previous fine-tuning stage:
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 vllm serve \
@@ -98,7 +98,7 @@ CUDA_VISIBLE_DEVICES=0 vllm serve \
     --port 8000 \
     --max-model-len 73728 \
     --enable-lora \
-    --served-model-name grader \
+    --served-model-name taddle \
     --enable-prefix-caching \
     --language-model-only \
     --reasoning-parser qwen3 \
@@ -106,7 +106,7 @@ CUDA_VISIBLE_DEVICES=0 vllm serve \
     --lora-modules masai=./saves/qwen3.5-9b/lora/sft/dataset_stage_2
 ```
 
-This starts the server on port `8000`, with the LoRA module `masai` pointing to the Stage 2 training checkpoint. The `--served-model-name grader` flag ensures the model is accessible as `grader` (the expected name for the Integrate module elsewhere in the pipeline).
+This starts the server on port `8000`, with the LoRA module `masai` pointing to the Stage 2 training checkpoint. The `--served-model-name taddle` flag ensures the model is accessible as `taddle` (the expected name for the Integrate module elsewhere in the pipeline).
 
 
 ## Quick Start
@@ -134,15 +134,15 @@ qwen3_30b:
     top_k: 20
     min_p: 0.0
 
-grader:
-  model: "grader"
+taddle:
+  model: "taddle"
   temperature: 0.1
   top_p: 0.95
   max_completion_tokens: 1024
-  base_url: "LOCAL_URL:grader"           # Grader model service address
+  base_url: "LOCAL_URL:taddle"           # Grader model service address
   api_key: "EMPTY"
   extra_body:
-    lora_name: grader
+    lora_name: taddle
 ```
 
 **Deployment Notes:**
@@ -219,7 +219,7 @@ python main.py \
     agents.defense_agent.input_paper_content="abstract" \
     llm_defense='${qwen3_30b}' \
     llm_tools='${qwen3_30b}' \
-    llm_integrate_tool='${grader}' \
+    llm_integrate_tool='${taddle}' \
     agents.defense_agent.max_workers_analyze_initial=3
 ```
 
