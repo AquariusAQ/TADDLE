@@ -1,8 +1,6 @@
 # TADDLE
 TADDLE: A Tool-Augmented Agent for Detecting Deficient LLM-Generated Peer Reviews
 
-Here's a method section you can drop into your README:
-
 ## Method
 
 TADDLE detects defects in LLM-generated peer reviews by decomposing the task into four specialized analysis stages, an integration stage, and a final composition stage. The key idea is that different defect types leave different kinds of evidence — factual errors live in the review-vs-paper relationship, while bias and tone signals live in the review text itself — so we route each review through dedicated tools rather than relying on a single end-to-end classifier.
